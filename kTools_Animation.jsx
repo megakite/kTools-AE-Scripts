@@ -21,10 +21,10 @@
   function doSeparation(prop, layer) {
     if (prop.value instanceof Array) {
       var temporaryString = '[';
-      var separationProperty = layer.effect.addProperty("Pseudo/kTools Separation Only");
-      separationProperty.property("Pseudo/kTools Separation Only-0001").expression = "//" + prop.name + '\r' + "value;";
+      var separationProperty = layer.effect.addProperty("Pseudo/kTools Separation");
+      separationProperty.property("Pseudo/kTools Separation-0001").expression = "//" + prop.name + '\r' + "value;";
       for (var k = 0; k < prop.value.length; k++) {
-        var currentDimention = separationProperty.property("Pseudo/kTools Separation Only-000" + (k+2));
+        var currentDimention = separationProperty.property("Pseudo/kTools Separation-000" + (k+2));
         if (prop.selectedKeys && prop.selectedKeys.length > 0) {
           var selectedKeyframes = prop.selectedKeys;
           for (var l = 0; l < selectedKeyframes.length; l++) {
@@ -32,7 +32,7 @@
             currentDimention.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)[k]);
           }
         }
-        temporaryString += 'effect("' + separationProperty.name + '")("Pseudo/kTools Separation Only-000' + (k+2) + '"), ';
+        temporaryString += 'effect("' + separationProperty.name + '")("Pseudo/kTools Separation-000' + (k+2) + '"), ';
       }
       prop.expression = temporaryString.slice(0, -2) + ']';
     }
@@ -75,17 +75,17 @@
         valueMin = Math.min(prop.keyValue(currentKeyframe), prop.keyValue(currentKeyframe-1));
       } rangeValue = (valueMin == 0 && valueMax == 0 ? 1 : Math.max(Math.abs(valueMax), Math.abs(valueMin)));
       var temporaryString = '[';
-      var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization 1D");
-      normalizationProperty.property("Pseudo/kTools Normalization 1D-0001").expression = "//" + prop.name + "\rvalue;";
-      var targetMultiplication = normalizationProperty.property("Pseudo/kTools Normalization 1D-0002");
-      var targetRange = normalizationProperty.property("Pseudo/kTools Normalization 1D-0003");
+      var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization SD");
+      normalizationProperty.property("Pseudo/kTools Normalization SD-0001").expression = "//" + prop.name + "\rvalue;";
+      var targetMultiplication = normalizationProperty.property("Pseudo/kTools Normalization SD-0002");
+      var targetRange = normalizationProperty.property("Pseudo/kTools Normalization SD-0003");
       targetRange.setValue(rangeValue);
       for (var k = 0; k < selectedKeyframes.length; k++) {
         var currentKeyframe = selectedKeyframes[k];
         targetMultiplication.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)/rangeValue);
       }
-      temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization 1D-0002")*' +
-                         'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization 1D-0003"), ';
+      temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0002")*' +
+                         'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0003"), ';
       prop.expression = temporaryString.slice(0, -2) + "]";
       //if (apply) doApplyCurve(normalizationProperty);
     }
@@ -95,7 +95,7 @@
     var selectedKeyframes = prop.selectedKeys;
     /*if (prop.matchName == "Pseudo/kTools Normalization MD") {
 
-    } else if (prop.matchName == "Pseudo/kTools Normalization 1D") {
+    } else if (prop.matchName == "Pseudo/kTools Normalization SD") {
 
     } else {*/
     var influences = new Array(selectedKeyframes.length);

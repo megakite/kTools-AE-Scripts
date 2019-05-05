@@ -1,2 +1,2 @@
 # kTools_AE
-Some scripts for After Effects.
+Some JS scripts for After Effects.
