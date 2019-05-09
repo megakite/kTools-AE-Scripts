@@ -54,12 +54,12 @@
       var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization MD");
       normalizationProperty.property("Pseudo/kTools Normalization MD-0001").expression = "//" + prop.name + "\rvalue;";
       for (var k = 0; k < prop.value.length; k++) {
-        var targetMultiplication = normalizationProperty.property("Pseudo/kTools Normalization MD-000" + (2*k+2));
+        var targetAmount = normalizationProperty.property("Pseudo/kTools Normalization MD-000" + (2*k+2));
         var targetRange = normalizationProperty.property("Pseudo/kTools Normalization MD-000" + (2*k+3));
         targetRange.setValue(rangeValue[k]);
         for (var l = 0; l < selectedKeyframes.length; l++) {
           var currentKeyframe = selectedKeyframes[l];
-          targetMultiplication.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)[k]/rangeValue[k]);
+          targetAmount.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)[k]/rangeValue[k]);
         }
         temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+2) + '")*' +
                            'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+3) + '"), ';
@@ -77,12 +77,12 @@
       var temporaryString = '[';
       var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization SD");
       normalizationProperty.property("Pseudo/kTools Normalization SD-0001").expression = "//" + prop.name + "\rvalue;";
-      var targetMultiplication = normalizationProperty.property("Pseudo/kTools Normalization SD-0002");
+      var targetAmount = normalizationProperty.property("Pseudo/kTools Normalization SD-0002");
       var targetRange = normalizationProperty.property("Pseudo/kTools Normalization SD-0003");
       targetRange.setValue(rangeValue);
       for (var k = 0; k < selectedKeyframes.length; k++) {
         var currentKeyframe = selectedKeyframes[k];
-        targetMultiplication.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)/rangeValue);
+        targetAmount.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)/rangeValue);
       }
       temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0002")*' +
                          'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0003"), ';
@@ -152,7 +152,7 @@
     win.grp1 = win.add('group');
     win.chkbx1 = win.add('checkbox', undefined, "Separate Only, for multidimensional properties");
     win.chkbx2 = win.add('checkbox', undefined, "Normalize, for animated properties");
-    win.chkbx3 = win.add('checkbox', undefined, "Apply curve, for the “Multiplication” property");
+    win.chkbx3 = win.add('checkbox', undefined, "Apply curve, for the “Amount” property");
     win.txtbx1 = win.add('edittext', [0,0,40,20], 1);
     win.lbl1 = win.add('statictext', undefined, 99);
     win.txtbx3 = win.add('edittext', [0,0,40,20], 0);

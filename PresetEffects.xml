@@ -2,7 +2,7 @@
 
 <Effects>
 	<Effect matchname="Pseudo/kTools Separation" name="$$$/AE/kTools/Animation/Separation=Separation">
-		<Checkbox name="$$$/AE/kTools/Animation/IsEnabled=Enabled" default="true" />
+		<Checkbox name="$$$/AE/kTools/Animation/Enabled=Enabled" default="true" />
 		<Slider name="$$$/AE/kTools/Animation/XRValue=X(R) Value" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
 		<Slider name="$$$/AE/kTools/Animation/YGValue=Y(G) Value" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
 		<Slider name="$$$/AE/kTools/Animation/ZBValue=Z(B) Value" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
@@ -10,18 +10,18 @@
 	</Effect>
 	<Effect matchname="Pseudo/kTools Normalization SD" name="$$$/AE/kTools/Animation/Normalization=Normalization">
 		<Checkbox name="$$$/AE/kTools/Animation/Enabled=Enabled" default="true" />
-		<Slider name="$$$/AE/kTools/Animation/Multiplication=Multiplication" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
+		<Slider name="$$$/AE/kTools/Animation/Amount=Amount" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
 		<Slider name="$$$/AE/kTools/Animation/Range=Range" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
 	</Effect>
 	<Effect matchname="Pseudo/kTools Normalization MD" name="$$$/AE/kTools/Animation/Normalization=Normalization">
 		<Checkbox name="$$$/AE/kTools/Animation/Enabled=Enabled" default="true" />
-		<Slider name="$$$/AE/kTools/Animation/XRMultiplication=X(R) Multiplication" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
+		<Slider name="$$$/AE/kTools/Animation/XRAmount=X(R) Amount" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
 		<Slider name="$$$/AE/kTools/Animation/XRRange=X(R) Range" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
-		<Slider name="$$$/AE/kTools/Animation/YGMultiplication=Y(G) Multiplication" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
+		<Slider name="$$$/AE/kTools/Animation/YGAmount=Y(G) Amount" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
 		<Slider name="$$$/AE/kTools/Animation/YGRange=Y(G) Range" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
-		<Slider name="$$$/AE/kTools/Animation/ZBMultiplication=Z(B) Multiplication" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
+		<Slider name="$$$/AE/kTools/Animation/ZBAmount=Z(B) Amount" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
 		<Slider name="$$$/AE/kTools/Animation/ZBRange=Z(B) Range" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
-		<Slider name="$$$/AE/kTools/Animation/TAMultiplication=T(A) Multiplication" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
+		<Slider name="$$$/AE/kTools/Animation/TAAmount=T(A) Amount" default="0" valid_min="-1" valid_max="1" slider_min="-1" slider_max="1" precision="3" />
 		<Slider name="$$$/AE/kTools/Animation/TARange=T(A) Range" default="0" valid_min="-32768" valid_max="32767" slider_min="-2048" slider_max="2047" />
 	</Effect>
 </Effects>
