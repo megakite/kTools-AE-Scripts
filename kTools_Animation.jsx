@@ -91,7 +91,7 @@
     }
   }
 
-  function doApplyCurve(prop, I, O, ovs) {
+  function doApplyCurve(prop, I, O, ovs, inv) {
     var selectedKeyframes = prop.selectedKeys;
     /*if (prop.matchName == "Pseudo/kTools Normalization MD") {
 
@@ -107,8 +107,13 @@
     } influences[selectedKeyframes.length-1] = 0;
     for (var k = 0; k < selectedKeyframes.length; k++) {
       var currentKeyframe = selectedKeyframes[k];
-      var easeIn = new KeyframeEase(0, I);
-      var easeOut = new KeyframeEase(influences[k], O);
+      if (inv) {
+        var easeIn = new KeyframeEase(0, I);
+        var easeOut = new KeyframeEase(influences[k], O);
+      } else {
+        var easeIn = new KeyframeEase(influences[k], O);
+        var easeOut = new KeyframeEase(0, I);
+      }
       prop.setInterpolationTypeAtKey(currentKeyframe, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.BEZIER);
       prop.setTemporalEaseAtKey(currentKeyframe, [easeIn], [easeOut]);
     }
@@ -156,6 +161,7 @@
     win.txtbx1 = win.add('edittext', [0,0,40,20], 1);
     win.lbl1 = win.add('statictext', undefined, 99);
     win.txtbx3 = win.add('edittext', [0,0,40,20], 0);
+    win.chkbx4 = win.add('checkbox', undefined, "Inverse");
     win.lbl2 = win.add('statictext', undefined, "TEST VERSION");
 
     win.chkbx2.value = true;
@@ -165,8 +171,8 @@
       win.lbl1.text = 100 - parseFloat(win.txtbx1.text);
     }
     win.chkbx1.onClick = function(){
-      if (this.value) win.chkbx2.enabled = win.chkbx3.enabled = false;
-      else win.chkbx2.enabled = win.chkbx3.enabled = true;
+      if (this.value) win.chkbx2.enabled = win.chkbx3.enabled = win.chkbx4.enabled = false;
+      else win.chkbx2.enabled = win.chkbx3.enabled = win.chkbx4.enabled = true;
     }
     win.btn1.onClick = function() {
       work(parseFloat(win.lbl1.text),
@@ -174,7 +180,8 @@
          parseFloat(win.txtbx3.text),
          win.chkbx1.value,
          win.chkbx2.value && win.chkbx2.enabled,
-         win.chkbx3.value && win.chkbx3.enabled);
+         win.chkbx3.value && win.chkbx3.enabled,
+         win.chkbx4.value && win.chkbx3.enabled);
     }
 
     win.layout.layout(true);
