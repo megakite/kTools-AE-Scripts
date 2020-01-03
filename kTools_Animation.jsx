@@ -67,8 +67,7 @@
       prop.expression = temporaryString.slice(0, -2) + "]";
       //if (apply) doApplyCurve(normalizationProperty);
     } else {
-      var rangeValue = new Array(selectedKeyframes.length);
-      var valueMax, valueMin;
+      var rangeValue, valueMax, valueMin;
       for (var k = 1; k < selectedKeyframes.length; k++) {
         var currentKeyframe = selectedKeyframes[k];
         valueMax = Math.max(prop.keyValue(currentKeyframe), prop.keyValue(currentKeyframe-1));
@@ -120,7 +119,7 @@
     /*}*/
   }
 
-  function work(typedIn, typedOut, overshoot, separation, normalization, applyCurve) {
+  function work(typedIn, typedOut, overshoot, separation, normalization, applyCurve, inversion) {
 
     var functionName = "kTools_Work";
 
@@ -137,7 +136,7 @@
             if (separation) doSeparation(currentProperty, currentLayer);
             if (currentProperty.selectedKeys && currentProperty.selectedKeys.length > 0) {
               if (normalization) doNormalization(currentProperty, currentLayer);
-              if (applyCurve) doApplyCurve(currentProperty, typedIn, typedOut, overshoot);
+              if (applyCurve) doApplyCurve(currentProperty, typedIn, typedOut, overshoot, inversion);
             }
           }
         }
@@ -181,7 +180,7 @@
          win.chkbx1.value,
          win.chkbx2.value && win.chkbx2.enabled,
          win.chkbx3.value && win.chkbx3.enabled,
-         win.chkbx4.value && win.chkbx3.enabled);
+         win.chkbx4.value && win.chkbx4.enabled);
     }
 
     win.layout.layout(true);
