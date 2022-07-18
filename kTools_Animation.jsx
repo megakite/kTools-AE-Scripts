@@ -1,125 +1,106 @@
-/*
-  kTools AE
+/**
+ * kTools AE
+ *
+ * Version IT-JUST-WORKS
+ * 2022 kite (@megakite).
+ */
+
+ (function(thisObj) {
   
-  TEST VERSION
-  2019 kite (@megakite).
-*/
-
-(function(thisObj) {
-/* INCOMPLETED
-  function getPropertyPathDetail(prop) {
-    var current = prop.parentProperty;
-    var string = prop.name;
-    while (current) {
-       string = current.name + "." + string;
-       current = current.parentProperty;
-    }
-    return string
-  }
-*/
-
   function doSeparation(prop, layer) {
     if (prop.value instanceof Array) {
-      var temporaryString = '[';
-      var separationProperty = layer.effect.addProperty("Pseudo/kTools Separation");
-      separationProperty.property("Pseudo/kTools Separation-0001").expression = "//" + prop.name + '\r' + "value;";
+      var tmpStr = '[';
+      var seprProp = layer.effect.addProperty("Pseudo/kTools Separation");
+      seprProp.property("Pseudo/kTools Separation-0001").expression = "//" + prop.name + '\r' + "value;";
       for (var k = 0; k < prop.value.length; k++) {
-        var currentDimention = separationProperty.property("Pseudo/kTools Separation-000" + (k+2));
-        if (prop.selectedKeys && prop.selectedKeys.length > 0) {
-          var selectedKeyframes = prop.selectedKeys;
-          for (var l = 0; l < selectedKeyframes.length; l++) {
-            var currentKeyframe = selectedKeyframes[l];
-            currentDimention.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)[k]);
+        var curDim = seprProp.property("Pseudo/kTools Separation-000" + (k+2));
+        if (prop.selKeys && prop.selKeys.length > 0) {
+          var selKeyfrms = prop.selKeys;
+          for (var l = 0; l < selKeyfrms.length; l++) {
+            var curKeyfrm = selKeyfrms[l];
+            curDim.setValueAtTime(prop.keyTime(curKeyfrm), prop.keyValue(curKeyfrm)[k]);
           }
         }
-        temporaryString += 'effect("' + separationProperty.name + '")("Pseudo/kTools Separation-000' + (k+2) + '"), ';
+        tmpStr += 'effect("' + seprProp.name + '")("Pseudo/kTools Separation-000' + (k+2) + '"), ';
       }
-      prop.expression = temporaryString.slice(0, -2) + ']';
+      prop.expression = tmpStr.slice(0, -2) + ']';
     }
   }
 
   function doNormalization(prop, layer) {
-    var selectedKeyframes = prop.selectedKeys;
+    var selKeyfrms = prop.selKeys;
     if (prop.value instanceof Array) {
-      var rangeValue = new Array(selectedKeyframes.length);
+      var rngVal = new Array(selKeyfrms.length);
       for (var k = 0; k < prop.value.length; k++) {
-        var valueMax, valueMin;
-        for (var l = 1; l < selectedKeyframes.length; l++) {
-          var currentKeyframe = selectedKeyframes[l];
-          valueMax = Math.max(prop.keyValue(currentKeyframe)[k], prop.keyValue(currentKeyframe-1)[k]);
-          valueMin = Math.min(prop.keyValue(currentKeyframe)[k], prop.keyValue(currentKeyframe-1)[k]);
-        } rangeValue[k] = (valueMin == 0 && valueMax == 0 ? 1 : Math.max(Math.abs(valueMax), Math.abs(valueMin)));
+        var valMax, valMin;
+        for (var l = 1; l < selKeyfrms.length; l++) {
+          var curKeyfrm = selKeyfrms[l];
+          valMax = Math.max(prop.keyValue(curKeyfrm)[k], prop.keyValue(curKeyfrm-1)[k]);
+          valMin = Math.min(prop.keyValue(curKeyfrm)[k], prop.keyValue(curKeyfrm-1)[k]);
+        } rngVal[k] = (valMin == 0 && valMax == 0 ? 1 : Math.max(Math.abs(valMax), Math.abs(valMin)));
       }
-      var temporaryString = '[';
-      var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization MD");
-      normalizationProperty.property("Pseudo/kTools Normalization MD-0001").expression = "//" + prop.name + "\rvalue;";
+      var tmpStr = '[';
+      var nrmlProp = layer.effect.addProperty("Pseudo/kTools Normalization MD");
+      nrmlProp.property("Pseudo/kTools Normalization MD-0001").expression = "//" + prop.name + "\rvalue;";
       for (var k = 0; k < prop.value.length; k++) {
-        var targetAmount = normalizationProperty.property("Pseudo/kTools Normalization MD-000" + (2*k+2));
-        var targetRange = normalizationProperty.property("Pseudo/kTools Normalization MD-000" + (2*k+3));
-        targetRange.setValue(rangeValue[k]);
-        for (var l = 0; l < selectedKeyframes.length; l++) {
-          var currentKeyframe = selectedKeyframes[l];
-          targetAmount.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)[k]/rangeValue[k]);
+        var tgtAmt = nrmlProp.property("Pseudo/kTools Normalization MD-000" + (2*k+2));
+        var tgtRng = nrmlProp.property("Pseudo/kTools Normalization MD-000" + (2*k+3));
+        tgtRng.setValue(rngVal[k]);
+        for (var l = 0; l < selKeyfrms.length; l++) {
+          var curKeyfrm = selKeyfrms[l];
+          tgtAmt.setValueAtTime(prop.keyTime(curKeyfrm), prop.keyValue(curKeyfrm)[k]/rngVal[k]);
         }
-        temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+2) + '")*' +
-                           'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+3) + '"), ';
+        tmpStr += 'effect("' + nrmlProp.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+2) + '")*' +
+                           'effect("' + nrmlProp.name + '")("Pseudo/kTools Normalization MD-000' + (2*k+3) + '"), ';
       }
-      prop.expression = temporaryString.slice(0, -2) + "]";
-      //if (apply) doApplyCurve(normalizationProperty);
+      prop.expression = tmpStr.slice(0, -2) + "]";
     } else {
-      var rangeValue, valueMax, valueMin;
-      for (var k = 1; k < selectedKeyframes.length; k++) {
-        var currentKeyframe = selectedKeyframes[k];
-        valueMax = Math.max(prop.keyValue(currentKeyframe), prop.keyValue(currentKeyframe-1));
-        valueMin = Math.min(prop.keyValue(currentKeyframe), prop.keyValue(currentKeyframe-1));
-      } rangeValue = (valueMin == 0 && valueMax == 0 ? 1 : Math.max(Math.abs(valueMax), Math.abs(valueMin)));
-      var temporaryString = '[';
-      var normalizationProperty = layer.effect.addProperty("Pseudo/kTools Normalization SD");
-      normalizationProperty.property("Pseudo/kTools Normalization SD-0001").expression = "//" + prop.name + "\rvalue;";
-      var targetAmount = normalizationProperty.property("Pseudo/kTools Normalization SD-0002");
-      var targetRange = normalizationProperty.property("Pseudo/kTools Normalization SD-0003");
-      targetRange.setValue(rangeValue);
-      for (var k = 0; k < selectedKeyframes.length; k++) {
-        var currentKeyframe = selectedKeyframes[k];
-        targetAmount.setValueAtTime(prop.keyTime(currentKeyframe), prop.keyValue(currentKeyframe)/rangeValue);
+      var rngVal, valMax, valMin;
+      for (var k = 1; k < selKeyfrms.length; k++) {
+        var curKeyfrm = selKeyfrms[k];
+        valMax = Math.max(prop.keyValue(curKeyfrm), prop.keyValue(curKeyfrm-1));
+        valMin = Math.min(prop.keyValue(curKeyfrm), prop.keyValue(curKeyfrm-1));
+      } rngVal = (valMin == 0 && valMax == 0 ? 1 : Math.max(Math.abs(valMax), Math.abs(valMin)));
+      var tmpStr = '[';
+      var nrmlProp = layer.effect.addProperty("Pseudo/kTools Normalization SD");
+      nrmlProp.property("Pseudo/kTools Normalization SD-0001").expression = "//" + prop.name + "\rvalue;";
+      var tgtAmt = nrmlProp.property("Pseudo/kTools Normalization SD-0002");
+      var tgtRng = nrmlProp.property("Pseudo/kTools Normalization SD-0003");
+      tgtRng.setValue(rngVal);
+      for (var k = 0; k < selKeyfrms.length; k++) {
+        var curKeyfrm = selKeyfrms[k];
+        tgtAmt.setValueAtTime(prop.keyTime(curKeyfrm), prop.keyValue(curKeyfrm)/rngVal);
       }
-      temporaryString += 'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0002")*' +
-                         'effect("' + normalizationProperty.name + '")("Pseudo/kTools Normalization SD-0003"), ';
-      prop.expression = temporaryString.slice(0, -2) + "]";
-      //if (apply) doApplyCurve(normalizationProperty);
+      tmpStr += 'effect("' + nrmlProp.name + '")("Pseudo/kTools Normalization SD-0002")*' +
+                         'effect("' + nrmlProp.name + '")("Pseudo/kTools Normalization SD-0003"), ';
+      prop.expression = tmpStr.slice(0, -2) + "]";
     }
   }
 
   function doApplyCurve(prop, I, O, ovs, inv) {
-    var selectedKeyframes = prop.selectedKeys;
-    /*if (prop.matchName == "Pseudo/kTools Normalization MD") {
-
-    } else if (prop.matchName == "Pseudo/kTools Normalization SD") {
-
-    } else {*/
-    var influences = new Array(selectedKeyframes.length);
-    for (var k = 1; k < selectedKeyframes.length; k++) {
-      var currentKeyframe = selectedKeyframes[k];
-      var dx = prop.keyValue(currentKeyframe) - prop.keyValue(currentKeyframe-1);
-      var dt = prop.keyTime(currentKeyframe) - prop.keyTime(currentKeyframe-1);
-      influences[k-1] = dx * ( 1 + ovs / 100 ) / dt / ( O / 100 );
-    } influences[selectedKeyframes.length-1] = 0;
-    for (var k = 0; k < selectedKeyframes.length; k++) {
-      var currentKeyframe = selectedKeyframes[k];
+    var selKeyfrms = prop.selKeys;
+    var speeds = new Array(selKeyfrms.length);
+    for (var l = 1; l < selKeyfrms.length; l++) {
+      var curKeyfrm = selKeyfrms[l];
+      var dx = prop.keyValue(curKeyfrm) - prop.keyValue(curKeyfrm-1);
+      var dt = prop.keyTime(curKeyfrm) - prop.keyTime(curKeyfrm-1);
+      speeds[l-1] = dx * ( 1 + ovs / 100 ) / dt / ( O / 100 );
+    } speeds[selKeyfrms.length-1] = 0;
+    for (var l = 0; l < selKeyfrms.length; l++) {
+      var curKeyfrm = selKeyfrms[l];
       if (inv) {
-        var easeIn = new KeyframeEase(0, I);
-        var easeOut = new KeyframeEase(influences[k], O);
-      } else {
-        var easeIn = new KeyframeEase(influences[k], O);
+        var easeIn = new KeyframeEase(speeds[selKeyfrms.length - l - 1], O);
         var easeOut = new KeyframeEase(0, I);
+      } else {
+        var easeIn = new KeyframeEase(0, I);
+        var easeOut = new KeyframeEase(speeds[l], O);
       }
-      prop.setInterpolationTypeAtKey(currentKeyframe, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.BEZIER);
-      prop.setTemporalEaseAtKey(currentKeyframe, [easeIn], [easeOut]);
+      prop.setInterpolationTypeAtKey(curKeyfrm, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.BEZIER);
+      prop.setTemporalEaseAtKey(curKeyfrm, [easeIn], [easeOut]);
     }
-    /*}*/
   }
 
-  function work(typedIn, typedOut, overshoot, separation, normalization, applyCurve, inversion) {
+  function work(typedIn, typedOut, overshoot, separation, normalization, applyCurve, inversed) {
 
     var functionName = "kTools_Work";
 
@@ -134,9 +115,9 @@
           for (var j = 0; j < selectedProperties.length; j++) {
             var currentProperty = selectedProperties[j];
             if (separation) doSeparation(currentProperty, currentLayer);
-            if (currentProperty.selectedKeys && currentProperty.selectedKeys.length > 0) {
+            if (currentProperty.selKeys && currentProperty.selKeys.length > 0) {
               if (normalization) doNormalization(currentProperty, currentLayer);
-              if (applyCurve) doApplyCurve(currentProperty, typedIn, typedOut, overshoot, inversion);
+              if (applyCurve) doApplyCurve(currentProperty, typedIn, typedOut, overshoot, inversed);
             }
           }
         }
@@ -154,33 +135,32 @@
     win.alignChildren = "left";
     win.btn1 = win.add('button', undefined, "Work!");
     win.grp1 = win.add('group');
-    win.chkbx1 = win.add('checkbox', undefined, "Separate Only, for multidimensional properties");
-    win.chkbx2 = win.add('checkbox', undefined, "Normalize, for animated properties");
-    win.chkbx3 = win.add('checkbox', undefined, "Apply curve, for the “Amount” property");
-    win.txtbx1 = win.add('edittext', [0,0,40,20], 1);
-    win.lbl1 = win.add('statictext', undefined, 99);
-    win.txtbx3 = win.add('edittext', [0,0,40,20], 0);
-    win.chkbx4 = win.add('checkbox', undefined, "Inverse");
-    win.lbl2 = win.add('statictext', undefined, "TEST VERSION");
+    win.chk1 = win.add('checkbox', undefined, "Separate");
+    win.chk2 = win.add('checkbox', undefined, "Normalize");
+    win.chk3 = win.add('checkbox', undefined, "Apply");
+    win.txt1 = win.add('edittext', [0,0,40,20], 10);
+    win.lbl1 = win.add('statictext', undefined, 90);
+    win.txt3 = win.add('edittext', [0,0,40,20], 0);
+    win.chk4 = win.add('checkbox', undefined, "Inverse");
+    win.lbl2 = win.add('statictext', undefined, "Version IJW");
 
-    win.chkbx2.value = true;
-    win.chkbx3.value = true;
+    win.chk3.value = true;
 
-    win.txtbx1.onChange = function() {
-      win.lbl1.text = 100 - parseFloat(win.txtbx1.text);
+    win.txt1.onChange = function() {
+      win.lbl1.text = 100 - parseFloat(win.txt1.text);
     }
-    win.chkbx1.onClick = function(){
-      if (this.value) win.chkbx2.enabled = win.chkbx3.enabled = win.chkbx4.enabled = false;
-      else win.chkbx2.enabled = win.chkbx3.enabled = win.chkbx4.enabled = true;
+    win.chk1.onClick = function(){
+      if (this.value) win.chk2.enabled = win.chk3.enabled = win.chk4.enabled = false;
+      else win.chk2.enabled = win.chk3.enabled = win.chk4.enabled = true;
     }
     win.btn1.onClick = function() {
       work(parseFloat(win.lbl1.text),
-         parseFloat(win.txtbx1.text),
-         parseFloat(win.txtbx3.text),
-         win.chkbx1.value,
-         win.chkbx2.value && win.chkbx2.enabled,
-         win.chkbx3.value && win.chkbx3.enabled,
-         win.chkbx4.value && win.chkbx4.enabled);
+         parseFloat(win.txt1.text),
+         parseFloat(win.txt3.text),
+         win.chk1.value,
+         win.chk2.value && win.chk2.enabled,
+         win.chk3.value && win.chk3.enabled,
+         win.chk4.value && win.chk4.enabled);
     }
 
     win.layout.layout(true);
