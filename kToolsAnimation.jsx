@@ -1,10 +1,3 @@
-/*
-	kTools Animation
-
- 	Version IT-JUST-WORKS
- 	2022 kite (@megakite).
-*/
-
 (function kToolsAnimation(thisObj) {
 	/* Build UI */
 	function buildUI(thisObj) {
