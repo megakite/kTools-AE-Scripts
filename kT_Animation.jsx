@@ -1,7 +1,5 @@
 (function kT_Animation(thisObj) {
-
     function do_separate(prop, layer) {
-        // Check whether selected properties are multi-dimensional
         if (prop.value instanceof Array) {
             var prop_sepr = layer.effect.addProperty("Pseudo/kTASepr");
             prop_sepr.property("Pseudo/kTASepr-0001").expression = "//" + prop.name + "\rvalue";
@@ -24,7 +22,6 @@
 
     function do_normalize(prop, layer) {
         var sel_keys = prop.selectedKeys;
-        // Check whether selected properties are multi-dimensional
         if (prop.value instanceof Array) {
             var ranges = new Array(sel_keys.length);
             for (var i = 0; i < ranges.length; ++i) {
@@ -99,7 +96,6 @@
             speeds[j - 1] = dx * (1 + overshoot / 100) / dt / (infl_out / 100);
         }
 
-        // Check whether selected properties are multi-dimensional
         if (prop.value instanceof Array) {
             speeds[sel_keys.length - 1] = new Array(prop.value.length);
             for (var i = 0; i < prop.value.length; ++i) {
@@ -240,5 +236,4 @@
     }
 
     buildUI(thisObj);
-
 })(this);
