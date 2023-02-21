@@ -1,4 +1,4 @@
-# kTools_AE_Scripts
+# kTools AE Scripts
 
 Some scripts for [After Effects](https://www.adobe.com/products/aftereffects.html).\
 一些用于 [After Effects](https://www.adobe.com/products/aftereffects.html) 的脚本。
